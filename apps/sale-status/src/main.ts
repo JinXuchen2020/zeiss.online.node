@@ -7,10 +7,10 @@ async function bootstrap() {
     SaleStatusModule,
     {
       transport: Transport.TCP,
-      host: '127.0.0.1',
-      port: 3001,
-    } as MicroserviceOptions
-  );
+      options: {
+        port: 3001,
+      }
+    });
   await app.listen();
 }
 bootstrap();
