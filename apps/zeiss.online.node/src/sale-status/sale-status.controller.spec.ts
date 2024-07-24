@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SaleStatusController } from './sale-status.controller';
 import { SaleStatusService } from './sale-status.service';
-import { SaleStatusProfile } from './sale-status.profile';
+import { SaleStatusProfile } from '../../../sale-status/src/sale-status.profile';
 
 describe('SaleStatusController', () => {
   let controller: SaleStatusController;

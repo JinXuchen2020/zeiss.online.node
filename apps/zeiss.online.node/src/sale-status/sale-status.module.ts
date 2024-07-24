@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SaleStatusService } from './sale-status.service';
 import { SaleStatusController } from './sale-status.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { SaleStatus } from './entities/sale-status.entity';
-import { SaleStatusProfile } from './sale-status.profile';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
@@ -18,6 +15,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     }
   ])],
   controllers: [SaleStatusController],
-  providers: [SaleStatusService, SaleStatusProfile],
+  providers: [SaleStatusService],
 })
 export class SaleStatusModule {}

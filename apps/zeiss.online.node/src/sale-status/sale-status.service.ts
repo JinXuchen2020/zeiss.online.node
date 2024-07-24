@@ -1,7 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SaleStatus } from './entities/sale-status.entity';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { CreateSaleStatusDto } from './dto/create-sale-status.dto';
+import { SaleStatusDto } from './dto/sale-status.dto';
+import { UpdateSaleStatusDto } from './dto/update-sale-status.dto';
 
 @Injectable()
 export class SaleStatusService {
@@ -10,28 +12,28 @@ export class SaleStatusService {
   ) {
 
   }
-  create(input: SaleStatus) {
-    return this.client.emit<SaleStatus>('sale_status_created', input);
+  create(input: CreateSaleStatusDto) {
+    return this.client.emit<SaleStatusDto>('sale_status_created', input);
   }
 
-  findAll() : Observable<SaleStatus[]> {
+  findAll() : Observable<SaleStatusDto[]> {
     const pattern = { cmd: 'findAll' };
-    return this.client.send<SaleStatus[]>(pattern, {});
+    return this.client.send<SaleStatusDto[]>(pattern, {});
   }
 
   findOne(id: number) {
     const pattern = { cmd: 'findOne' };
     const payload = { id: id };
-    return this.client.send<SaleStatus>(pattern, payload);
+    return this.client.send<SaleStatusDto>(pattern, payload);
   }
 
-  update(id: number, input: SaleStatus) {
+  update(id: number, input: UpdateSaleStatusDto) {
     const payload = { 
       id: id,
       input: input
     };
     
-    this.client.emit<SaleStatus>('sale_status_updated', payload);
+    this.client.emit<SaleStatusDto>('sale_status_updated', payload);
   }
 
   remove(id: number) {

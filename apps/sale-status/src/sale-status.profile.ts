@@ -17,13 +17,13 @@ export class SaleStatusProfile extends AutomapperProfile {
   override get profile(): MappingProfile {
     return (mapper) => {
       createMap(mapper, SaleStatus, SaleStatusDto, 
-        forMember((des) => des.linkUpDate, mapFrom((src) => src.linkUpDate?.toLocaleDateString())),
-        forMember((des) => des.bidDate, mapFrom((src) => src.bidDate?.toLocaleDateString())),
-        forMember((des) => des.visitDate, mapFrom((src) => src.visitDate?.toLocaleDateString())),
-        forMember((des) => des.bidConfirmDate, mapFrom((src) => src.bidConfirmDate?.toLocaleDateString())), 
-        forMember((des) => des.contractDate, mapFrom((src) => src.contractDate?.toLocaleDateString())),
-        forMember((des) => des.sendDate, mapFrom((src) => src.sendDate?.toLocaleDateString())),
-        forMember((des) => des.remarkDate, mapFrom((src) => src.remarkDate?.toLocaleDateString())),
+        forMember((des) => des.linkUpDate, mapFrom((src) => src.linkUpDate ? src.linkUpDate.toLocaleDateString() : null)),
+        forMember((des) => des.bidDate, mapFrom((src) => src.bidDate ? src.bidDate.toLocaleDateString() : null)),
+        forMember((des) => des.visitDate, mapFrom((src) => src.visitDate ? src.visitDate.toLocaleDateString() : null)),
+        forMember((des) => des.bidConfirmDate, mapFrom((src) => src.bidConfirmDate ? src.bidConfirmDate.toLocaleDateString() : null)), 
+        forMember((des) => des.contractDate, mapFrom((src) => src.contractDate ? src.contractDate.toLocaleDateString() : null)),
+        forMember((des) => des.sendDate, mapFrom((src) => src.sendDate ? src.sendDate.toLocaleDateString() : null)),
+        forMember((des) => des.remarkDate, mapFrom((src) => src.remarkDate ? src.remarkDate.toLocaleDateString() : null)),
       );
       createMap(mapper, CreateSaleStatusDto, SaleStatus, 
         forMember((des) => des.linkUpDate, mapFrom((src) => src.linkUpDate ? new Date(src.linkUpDate) : null)),

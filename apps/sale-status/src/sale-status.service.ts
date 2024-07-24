@@ -19,7 +19,7 @@ export class SaleStatusService {
   }
 
   findOne(id: number) {
-    return this.saleStatusRepository.createQueryBuilder().where("id = :id", { id: id }).getOne();
+    return this.saleStatusRepository.createQueryBuilder().where("id = :id", { 'id': id }).getOne();
   }
 
   update(id: number, input: SaleStatus) {

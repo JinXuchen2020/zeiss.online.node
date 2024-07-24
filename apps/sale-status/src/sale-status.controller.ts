@@ -1,38 +1,49 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseInterceptors } from '@nestjs/common';
 import { SaleStatusService } from './sale-status.service';
 import { SaleStatus } from './entities/sale-status.entity';
 import * as XLSX from 'xlsx';
-import { EventPattern, MessagePattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateSaleStatusDto } from './dto/create-sale-status.dto';
+import { InjectMapper, MapInterceptor } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { SaleStatusDto } from './dto/sale-status.dto';
+import { UpdateSaleStatusDto } from './dto/update-sale-status.dto';
 
 @Controller('saleInfos')
 export class SaleStatusController {
   constructor(
-    private readonly saleStatusService: SaleStatusService
+    private readonly saleStatusService: SaleStatusService,
+    @InjectMapper() 
+    private readonly mapper: Mapper,
   ) {}
 
   @EventPattern('sale_status_created')
-  async create(saleStatus: SaleStatus) {
-    return this.saleStatusService.create(saleStatus);
+  @UseInterceptors(MapInterceptor(SaleStatus, SaleStatusDto))
+  async create(@Payload() saleStatus: CreateSaleStatusDto) {
+    const result = this.mapper.map(saleStatus, CreateSaleStatusDto, SaleStatus);
+    return this.saleStatusService.create(result);
   }
 
   @MessagePattern({ cmd: 'findAll' })
-  findAll(): Promise<SaleStatus[]> {
-    return this.saleStatusService.findAll();
+  async findAll(): Promise<SaleStatusDto[]> {
+    const result = await this.saleStatusService.findAll();    
+    return result.map(item => this.mapper.map(item, SaleStatus, SaleStatusDto));
   }
 
   @MessagePattern({ cmd: 'findOne' })
-  findOne(id: string) : Promise<SaleStatus> {
-    return this.saleStatusService.findOne(+id);
+  async findOne(@Payload('id') id: string) : Promise<SaleStatusDto> {
+    const result = await this.saleStatusService.findOne(+id);
+    return this.mapper.map(result, SaleStatus, SaleStatusDto);
   }
 
   @EventPattern('sale_status_updated')
-  async update(saleStatus: SaleStatus) {
-    const id = saleStatus.id;    
-    this.saleStatusService.update(+id, saleStatus);
+  async update(@Payload('id') id: string, @Payload('input') saleStatus: UpdateSaleStatusDto) {
+    const result = this.mapper.map(saleStatus, UpdateSaleStatusDto, SaleStatus);
+    this.saleStatusService.update(+id, result);
   }
 
   @EventPattern('sale_status_deleted')
-  async remove(id: string) {
+  async remove(@Payload('id') id: string) {
     await this.saleStatusService.remove(+id);
   }
 
